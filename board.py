@@ -286,7 +286,17 @@ class Board(BoardBase):
         """
         **TODO**: Check if the given cell coordinates are valid. A cell coordinate is valid if both
         row and coloumn are between 0 and 7 inclusively.
+        """
 
+        cell = self.cell
+        row, col = 0, 0
+        if row < 0 or row > 7 or col < 0 or col > 7:
+            print("Falsche koordinaten")
+            return False
+        else:
+            return True 
+
+        """
         **HINT**:
         Cell is a tuple (row, col) of row and column. Unpack the tuple and check both row and col for
         being within the allowed range (0 to 7 inclusively).
