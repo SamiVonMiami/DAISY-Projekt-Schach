@@ -293,6 +293,13 @@ class Board(BoardBase):
         Don´t forget to handle the special case of "cell" being None. Return False in that case
         """
         # TODO: Implement
+        cell = cell.self
+        row, col = 0, 0
+        if row < 0 or row > 7 or col < 0 or col > 7:
+            print("no, no. Geht nikis :/")
+            return False
+        else:
+            return True
 
     def cell_is_valid_and_empty(self, cell):
         """
