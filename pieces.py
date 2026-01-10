@@ -85,6 +85,24 @@ class Piece:
         :return: Return True 
         """
         # TODO: Implement
+        temp_cell = self.cell #ok falls wir prüfung sind kurze kommentar. also erstmal jetzige pos mit temp_cell speichern
+
+        test_if_available = Piece.get_reachable_cells() #diese liste aller zellen die möglcih sind
+        is_available = []                               #hier kommen später nur die, die gehen
+        
+        for target_cell in test_if_available:           # iterieren meterieren und so du weißt
+           target_piece = board.get_cell(target_cell)   #was macht das genau überprüfen
+           board.set_cell(target_cell, self)            #dieser bre bewegt
+           board.set_cell(temp_cell, None)              #dieser bre löscht kurz wo der davor war
+
+
+           if is_king_check_cached() == False:
+            is_available.append(target_cell)
+
+        board.set_cell(temp_cell, self)       #wieder auf die zelle tun, und der zweite parameter ihr wisst bescheid ist für die figur
+        board.set_cell(target_cell, target_piece)
+
+        return is_available
 
 class Pawn(Piece):  # Bauer
     def __init__(self, board, white):
