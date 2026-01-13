@@ -94,7 +94,40 @@ def evaluate_all_possible_moves(board, minMaxArg, maximumNumberOfMoves = 10):
     more moves possible (in most situations there are), only return the top (or worst). Hint: Slice the list after sorting. 
     """
     # TODO: Implement the method according to the above description
+    moves = []
 
+
+    # für alle figuren der jetzigen farbe
+    for piece in board.iterate_cells_with_pieces(minMaxArg.playAsWhite):
+        valid_cells = piece.get_valid_cells()
+
+        # dings, hab tiramisu in kommentaren gemacht. killllaa!
+        # auf jeden fall
+
+        for target in valid_cells:
+            #alten platz speichern
+            old_cell = piece.cell
+            captured_piece = board.get_cell(target)
+
+            #mach den zug (bismillah <3)
+            board.set_cell(target, piece)
+
+            #evaluieren mevaluieren und so du weißt bescheid akhi <3
+            score.evaluate()
+            moves.append(Move(piece, target, score))
+
+            #alten platz wiederhertsellen
+            board.set_cell(old_cell, piece)
+            board.set_cell(target, captured_piece)
+    
+    #sortieren mortieren
+    if minMaxArg.playAsWhite:
+        moves.sort(key = lambda m: m.score, reverse = True)
+    else:
+        moves.sort(key = lambda m: m.score)
+    
+    #return meturn ka was soll ich sagen XD
+    return moves[:maximumNumberOfMoves]
 
 def minMax(board, minMaxArg):
     """
