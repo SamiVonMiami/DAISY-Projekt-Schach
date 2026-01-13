@@ -197,6 +197,54 @@ def minMax(board, minMaxArg):
     """
     # TODO: Implement the Mini-Max algorithm
 
+    #lhamdulillah schon sortiert von beste zu schlechteste moves
+    moves = evaluate_all_possible_moves(board, minMaxArg)
+
+    #wenn keine moves dann GAME OVER
+    if len(moves) == 0:
+        #für weiß keine moves ist schaize
+        if minMaxArg.playAsWhite:
+            score = -1e9
+        #für schwarz keine moves ist gail
+        else:
+            score = 1e9
+
+        return Move(None, None, score)
+    
+    if minMaxArg.depth == 1:
+        return moves[0]
+
+    for move in moves:
+        piece = move.piece
+        cell = move.cell
+
+        old_cell = piece.cell
+        captured_piece = board.get_cell(target)
+
+        #zug machen
+        board.set_cell(target, piece)
+
+        #wdholen
+        reply_best = minMax_cached(board, minMaxArg.next())
+
+        #neuer score
+        move.score = reply_best.score
+
+        #wiederherstellen
+        board.set_cell(old_cell, piece)
+        board.set_cell(target, captured_piece)
+
+    #sortiere mit neuem score
+    if minMaxArg.playAsWhite:
+        moves.sort(key = lambda m: m.score, reverse = True)
+    else:
+        moves.sort(key = lambda m: m.score)
+
+    return moves[0]
+
+
+
+
 
 def suggest_random_move(board):
     """
