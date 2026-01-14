@@ -294,7 +294,7 @@ class Board(BoardBase):
         """
         # TODO: Implement
         cell = cell.self
-        row, col = 0, 0
+        row, col = cell
         if row < 0 or row > 7 or col < 0 or col > 7:
             print("no, no. Geht nikis :/")
             return False
