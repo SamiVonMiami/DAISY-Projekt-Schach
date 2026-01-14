@@ -80,9 +80,13 @@ class Piece:
             # temporarily move self to target
             self.board.set_cell(target, self)
 
-            # check if own king is in check after move
             in_check = self.board.is_king_check_cached(self.is_white())
 
+            #wegen king, nur züge zurück geben wenn der nicht in gefahr ist danach
+            # if not in_check:
+            #     valid.append(target)
+
+            
             # restore original board state
             self.board.set_cell(old_cell, self)
             self.board.set_cell(target, captured)

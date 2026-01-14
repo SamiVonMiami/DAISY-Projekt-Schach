@@ -355,6 +355,12 @@ class Board(BoardBase):
         if other is None:
             return True
 
+        #king kann ja nicht geschlagen werden weil davor sollte spiel aufhören eig deshalb machen wir mal so:
+        # damit keiner king angreifen kann
+        # from pieces import King
+        # if isinstance(other, King):
+        #     return False
+
         return other.is_white() != piece.is_white()
 
     def piece_can_hit_on_cell(self, piece, cell):
@@ -378,5 +384,12 @@ class Board(BoardBase):
         other = self.get_cell(cell)
         if other is None:
             return False
+
+        #weil könig drawmaqueen ist
+        #damit keiner king angreifen kann
+        # from pieces import King
+        # if isinstance(other, King):
+        #     return False
+
 
         return other.is_white() != piece.is_white()
