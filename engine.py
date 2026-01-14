@@ -261,7 +261,20 @@ def suggest_random_move(board):
     """
     # TODO: Implement a valid random move
 
-
+    #
+    moveable_pieces = []
+    for piece in board.iterate_with_pieces(True):
+        valid = piece.get_valid_cells()
+        if len(valid) > 0:
+            moveable_pieces.append((piece, valid))
+    if len(moveable_pieces) == 0:
+                return None
+    piece, valid_cells = random.choise(moveable_pieces)
+    cell = random.choice(valid_cells)
+    #Die Punktzahl ist hier kein muss; wir können die aktuelle Bewertung nach dem Ziehen verwenden
+    #Am einfachsten ist board.evaluate(), ohne das Board zu ändern (für die Benutzeroberfläche immer noch akzeptabel)
+    return Move(piece, cell, board.evaluate())
+            
 
 def suggest_move(board):
     """
