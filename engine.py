@@ -94,7 +94,40 @@ def evaluate_all_possible_moves(board, minMaxArg, maximumNumberOfMoves = 10):
     more moves possible (in most situations there are), only return the top (or worst). Hint: Slice the list after sorting. 
     """
     # TODO: Implement the method according to the above description
+    moves = []
 
+
+    # für alle figuren der jetzigen farbe
+    for piece in board.iterate_cells_with_pieces(minMaxArg.playAsWhite):
+        valid_cells = piece.get_valid_cells()
+
+        # dings, hab tiramisu in kommentaren gemacht. killllaa!
+        # auf jeden fall
+
+        for target in valid_cells:
+            #alten platz speichern
+            old_cell = piece.cell
+            captured_piece = board.get_cell(target)
+
+            #mach den zug (bismillah <3)
+            board.set_cell(target, piece)
+
+            #evaluieren mevaluieren und so du weißt bescheid akhi <3
+            score.evaluate()
+            moves.append(Move(piece, target, score))
+
+            #alten platz wiederhertsellen
+            board.set_cell(old_cell, piece)
+            board.set_cell(target, captured_piece)
+    
+    #sortieren mortieren
+    if minMaxArg.playAsWhite:
+        moves.sort(key = lambda m: m.score, reverse = True)
+    else:
+        moves.sort(key = lambda m: m.score)
+    
+    #return meturn ka was soll ich sagen XD
+    return moves[:maximumNumberOfMoves]
 
 def minMax(board, minMaxArg):
     """
@@ -163,6 +196,54 @@ def minMax(board, minMaxArg):
     :rtype: :py:class:`Move`
     """
     # TODO: Implement the Mini-Max algorithm
+
+    #lhamdulillah schon sortiert von beste zu schlechteste moves
+    moves = evaluate_all_possible_moves(board, minMaxArg)
+
+    #wenn keine moves dann GAME OVER
+    if len(moves) == 0:
+        #für weiß keine moves ist schaize
+        if minMaxArg.playAsWhite:
+            score = -1e9
+        #für schwarz keine moves ist gail
+        else:
+            score = 1e9
+
+        return Move(None, None, score)
+    
+    if minMaxArg.depth == 1:
+        return moves[0]
+
+    for move in moves:
+        piece = move.piece
+        cell = move.cell
+
+        old_cell = piece.cell
+        captured_piece = board.get_cell(target)
+
+        #zug machen
+        board.set_cell(target, piece)
+
+        #wdholen
+        reply_best = minMax_cached(board, minMaxArg.next())
+
+        #neuer score
+        move.score = reply_best.score
+
+        #wiederherstellen
+        board.set_cell(old_cell, piece)
+        board.set_cell(target, captured_piece)
+
+    #sortiere mit neuem score
+    if minMaxArg.playAsWhite:
+        moves.sort(key = lambda m: m.score, reverse = True)
+    else:
+        moves.sort(key = lambda m: m.score)
+
+    return moves[0]
+
+
+
 
 
 def suggest_random_move(board):

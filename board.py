@@ -240,7 +240,11 @@ class Board(BoardBase):
         :param white: True if WHITE pieces are to be iterated, False otherwise
         :type white: Boolean
         """
-        # TODO: Implement
+        for row in range(8):
+            for col in range(8):
+                piece = self.cells[row][col]
+                if piece is not None and piece.is_white() == white:
+                    yield piece
 
     def find_king(self, white):
         """
@@ -254,7 +258,10 @@ class Board(BoardBase):
 
         :return: The :py:class:'King': object of the given color or None if there is no King on the board.
         """
-        # TODO: Implement
+        for piece in self.iterate_cells_with_pieces(white):
+            if isinstance(piece, King):
+                return piece
+        return None
 
     def is_king_check(self, white):
         """
@@ -266,7 +273,18 @@ class Board(BoardBase):
         For each opposing piece, call the "get_reachable_cells()" method to get a list of all reachable cells.
         Iterate over each reachable cell and check if the kings cell is reachable. If yes, shortcut and return True right away.
         """
-        # TODO: Implement
+        king = self.find_king(white)
+        if king is None:
+            return False
+
+        king_cell = king.cell
+
+        for enemy in self.iterate_cells_with_pieces(not white):
+            for cell in enemy.get_reachable_cells():
+                # cells are numpy arrays -> compare safely
+                if np.array_equal(cell, king_cell):
+                    return True
+        return False
 
     def evaluate(self):
         """
@@ -278,9 +296,15 @@ class Board(BoardBase):
         Use the iterate_cells_with_pieces Method to find all WHITE pieces and call their respective "evaluate" Method. Sum those scores up.
         Then use the iterate_cells_with_pieces Method to find all BLACK pieces, call their respective "evaluate" Method and substract that from the score.
         """
-        # TODO: Implement
         score = 0.0
-        return score
+
+        for piece in self.iterate_cells_with_pieces(True):
+            score += float(piece.evaluate())
+
+        for piece in self.iterate_cells_with_pieces(False):
+            score -= float(piece.evaluate())
+
+        return float(score)
 
     def is_valid_cell(self, cell):
         """
@@ -292,14 +316,10 @@ class Board(BoardBase):
         being within the allowed range (0 to 7 inclusively).
         Don´t forget to handle the special case of "cell" being None. Return False in that case
         """
-        # TODO: Implement
-        cell = cell.self
-        row, col = cell
-        if row < 0 or row > 7 or col < 0 or col > 7:
-            print("no, no. Geht nikis :/")
+        if cell is None:
             return False
-        else:
-            return True
+        row, col = cell
+        return 0 <= row <= 7 and 0 <= col <= 7
 
     def cell_is_valid_and_empty(self, cell):
         """
@@ -309,7 +329,9 @@ class Board(BoardBase):
         You can use the "is_valid_cell()" Method to verify the cell is valid in the first place.
         If so, use "get_cell()" to retrieve the piece placed on it and return True if there is None
         """
-        # TODO: Implement
+        if not self.is_valid_cell(cell):
+            return False
+        return self.get_cell(cell) is None
 
     def piece_can_enter_cell(self, piece, cell):
         """
@@ -326,8 +348,14 @@ class Board(BoardBase):
         If, however, there is another piece, it must be of opposing color. Check the other pieces "white" attribute and compare against
         the given piece "white" attribute.
         """
-        # TODO: Implement
- 
+        if not self.is_valid_cell(cell):
+            return False
+
+        other = self.get_cell(cell)
+        if other is None:
+            return True
+
+        return other.is_white() != piece.is_white()
 
     def piece_can_hit_on_cell(self, piece, cell):
         """
@@ -344,4 +372,11 @@ class Board(BoardBase):
         If, however, there is another piece, it must be of opposing color. Check the other pieces "white" attribute and compare against
         the given piece "white" attribute.
         """
-        # TODO: Implement
+        if not self.is_valid_cell(cell):
+            return False
+
+        other = self.get_cell(cell)
+        if other is None:
+            return False
+
+        return other.is_white() != piece.is_white()
