@@ -83,8 +83,8 @@ class Piece:
             in_check = self.board.is_king_check_cached(self.is_white())
 
             #wegen king, nur züge zurück geben wenn der nicht in gefahr ist danach
-            # if not in_check:
-            #     valid.append(target)
+            if not in_check:
+                valid.append(target)
 
             
             # restore original board state

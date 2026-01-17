@@ -219,10 +219,10 @@ def minMax(board, minMaxArg):
         cell = move.cell
 
         old_cell = piece.cell
-        captured_piece = board.get_cell(target)
+        captured_piece = board.get_cell(cell)
 
         #zug machen
-        board.set_cell(target, piece)
+        board.set_cell(cell, piece)
 
         #wdholen
         reply_best = minMax_cached(board, minMaxArg.next())
@@ -269,7 +269,7 @@ def suggest_random_move(board):
             moveable_pieces.append((piece, valid))
     if len(moveable_pieces) == 0:
                 return None
-    piece, valid_cells = random.choise(moveable_pieces)
+    piece, valid_cells = random.choice(moveable_pieces)
     cell = random.choice(valid_cells)
     #Die Punktzahl ist hier kein muss; wir können die aktuelle Bewertung nach dem Ziehen verwenden
     #Am einfachsten ist board.evaluate(), ohne das Board zu ändern (für die Benutzeroberfläche immer noch akzeptabel)
