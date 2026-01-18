@@ -109,11 +109,11 @@ def evaluate_all_possible_moves(board, minMaxArg, maximumNumberOfMoves = 10):
             old_cell = piece.cell
             captured_piece = board.get_cell(target)
 
-            #mach den zug (bismillah <3)
+            #mach den zug 
             board.set_cell(target, piece)
 
             #evaluieren mevaluieren und so du weißt bescheid akhi <3
-            score.evaluate()
+            score = board.evaluate()
             moves.append(Move(piece, target, score))
 
             #alten platz wiederhertsellen
@@ -216,13 +216,12 @@ def minMax(board, minMaxArg):
 
     for move in moves:
         piece = move.piece
-        cell = move.cell
-
+        target = move.cell
         old_cell = piece.cell
-        captured_piece = board.get_cell(cell)
+        captured_piece = board.get_cell(target)
 
         #zug machen
-        board.set_cell(cell, piece)
+        board.set_cell(target, piece)
 
         #wdholen
         reply_best = minMax_cached(board, minMaxArg.next())
@@ -263,7 +262,7 @@ def suggest_random_move(board):
 
     #
     moveable_pieces = []
-    for piece in board.iterate_with_pieces(True):
+    for piece in board.iterate_cells_with_pieces(False):
         valid = piece.get_valid_cells()
         if len(valid) > 0:
             moveable_pieces.append((piece, valid))
@@ -280,7 +279,7 @@ def suggest_move(board):
     """
     Helper function to start the mini-max algorithm.
     """
-    return minMax_cached(board, MinMaxArg())
+    return minMax_cached(board, MinMaxArg(playAsWhite=False))
 
 eval_cache = {}
 total_hits = 0
