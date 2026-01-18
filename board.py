@@ -122,7 +122,7 @@ class BoardBase:
         Calls is_king_check for board configurations not yet known. Caches the result for later look-up.
         """
         # Calculate hash and see if current position is in the cache
-        hash = self.hash() + "-w" if white else "-b"
+        hash = self.hash() + ("-w" if white else "-b")
         if hash in self.check_cache:
             return self.check_cache[hash]
 

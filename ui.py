@@ -216,7 +216,11 @@ def run_game(board, manual=False):
                                 board.set_cell(uiState.mouse_over_cell, piece)
 
                                 nextMove = None
-                                whitesTurn = False
+
+                                if manual:
+                                    whitesTurn = not whitesTurn
+                                else:
+                                    whitesTurn = False
 
 
                             # piece.board.set_cell(uiState.mouse_over_cell, piece)
