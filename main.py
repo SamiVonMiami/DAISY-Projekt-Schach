@@ -16,8 +16,12 @@ def run_tests():
     else:
         sys.exit(1)
 
+
+    #wenn könig stirb hört das spiel nicht auf
+    #bei manual kein switch
+
 def main():  
-    args = "ai"
+    args = "test"
 
     if args == "manual":
         board = Board()
